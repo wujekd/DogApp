@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using DogApp.Models;
+using DogApp.NetworkServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DogApp.Controllers;
@@ -10,10 +11,12 @@ using Microsoft.EntityFrameworkCore;
 public class DogController : ControllerBase
 {
     private readonly AppDbContext _DbContext;
+    private readonly IFetchDog _FetchDog;
 
-    public DogController(AppDbContext dbContext)
+    public DogController(AppDbContext dbContext, IFetchDog fetchDog)
     {
         _DbContext = dbContext;
+        _FetchDog = fetchDog;
     }
 
     [HttpGet]
@@ -22,6 +25,16 @@ public class DogController : ControllerBase
         return Ok(await _DbContext.Dogs.ToListAsync());
     }
 
+    // GET A RANDOM DOG FROM API
+    [HttpGet("random-api")]
+    public async Task<IActionResult> RandomApi()
+    {
+        var DogImageUrl = await _FetchDog.FetchDogFromApi();
+        
+        // HANDLE NOT FOUND
+        
+        return Ok(DogImageUrl);
+    }
 
     
     [HttpPost("add")]
