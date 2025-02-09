@@ -13,8 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
-        "",
-        ServerVersion.AutoDetect("")
+        "server=localhost;port=3306;database=dog_app;user=project_user;password=admin123;",
+        ServerVersion.AutoDetect("server=localhost;port=3306;database=dog_app;user=project_user;password=admin123;")
         )
     );
 
