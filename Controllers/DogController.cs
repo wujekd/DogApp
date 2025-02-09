@@ -19,13 +19,16 @@ public class DogController : ControllerBase
         _FetchDog = fetchDog;
     }
 
+    
+    // GET ALL DOGS
     [HttpGet]
     public async Task<IActionResult> GetDogs()
     {
         return Ok(await _DbContext.Dogs.ToListAsync());
     }
+    
 
-    // GET A RANDOM DOG FROM API
+    // GET A DOG FROM EXTERNAL API
     [HttpGet("random-api")]
     public async Task<IActionResult> RandomApi()
     {
