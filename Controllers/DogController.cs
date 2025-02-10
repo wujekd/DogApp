@@ -41,8 +41,9 @@ public class DogController : ControllerBase
         
         return Ok(DogImageUrl);
     }
-
     
+    
+    // ADD A NEW DOG
     [HttpPost("add")]
     public async Task<IActionResult> AddDog([FromBody] Dog dog)
     {
@@ -57,14 +58,44 @@ public class DogController : ControllerBase
     }
     
     
-
-    [Authorize]
+// GET ALL BREEDS WITH DOG COUNT
+    //[Authorize]
     [HttpGet("breeds")]
     public async Task<IActionResult> GetBreeds()
     {
-        return Ok(await _DbContext.Breeds.ToListAsync());
+        var breeds = await _DbContext.Breeds.ToListAsync();
+        var response = new List<BreedReturnDTO>();
+
+        foreach (var breed in breeds)
+        {
+            var dogCount = await _DbContext.Dogs.CountAsync(d => d.BreedId == breed.Id);
+
+            response.Add(new BreedReturnDTO
+            {
+                Id = breed.Id,
+                Name = breed.Name,
+                DogCount = dogCount
+            });
+        }
+        return Ok(response);
     }
     
+    
+    //GET ALL DOGS OF A GIVEN BREED
+    [HttpGet("breeds/{breedId}")]
+    public async Task<IActionResult> GetBreed(int breedId)
+    {
+        var breed = await _DbContext.Breeds.FindAsync(breedId);
+        var dogs = await _DbContext.Dogs.Where(d => d.BreedId == breedId).ToListAsync();
+
+        var response = new BreedReturnDTO
+        {
+            Id = breed.Id,
+            Name = breed.Name,
+            Dogs = dogs
+        };
+        return Ok(response);
+    }
     
 
     

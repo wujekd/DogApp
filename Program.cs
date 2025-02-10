@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
@@ -117,7 +116,7 @@ GlobalConfiguration.Configuration.UseConsole().UseColouredConsoleLogProvider();
 
 builder.Services.AddScoped<DogAdder>();
 
-var app = builder.Build();
+var app  = builder.Build();
 
 // run on startup
 using (var scope = app.Services.CreateScope())
@@ -126,6 +125,7 @@ using (var scope = app.Services.CreateScope())
     await dogManager.AddDogFromAPI();
 }
 
+//add the job to hangfire
 using (var scope = app.Services.CreateScope())
 {
     var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
