@@ -152,7 +152,7 @@ public class AccountsController : Controller
         {
             return BadRequest("The breed was not in favourite breeds.");
         }
-        
+
         _DbContext.FavouriteBreeds.Remove(favouriteBreed);
         await _DbContext.SaveChangesAsync();
         return Ok("Breed was removed.");

@@ -1,13 +1,14 @@
 using System.Text.Json.Serialization;
 using DogApp.Models;
 using DogApp.NetworkServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DogApp.Controllers;
 using Microsoft.EntityFrameworkCore;
 
-[Route("[controller]")]
+[Route("dogs")]
 [ApiController]
 public class DogController : ControllerBase
 {
@@ -23,7 +24,7 @@ public class DogController : ControllerBase
 
     
     // GET ALL DOGS
-    [HttpGet]
+    [HttpGet("all")]
     public async Task<IActionResult> GetDogs()
     {
         return Ok(await _DbContext.Dogs.ToListAsync());
@@ -57,6 +58,7 @@ public class DogController : ControllerBase
     
     
 
+    [Authorize]
     [HttpGet("breeds")]
     public async Task<IActionResult> GetBreeds()
     {

@@ -1,16 +1,17 @@
 using DogApp.Models;
 using DogApp.NetworkServices;
+using Hangfire.Console;
+using Hangfire.Server;
 using Microsoft.EntityFrameworkCore;
 
 namespace DogApp;
 
-public class DogDataManager
+public class DogAdder
 {
     private readonly IFetchDog dogFetcher;
     private readonly AppDbContext _dbContext;
-
-
-    public DogDataManager(IFetchDog fetchDog, AppDbContext dbContext)
+    
+    public DogAdder(IFetchDog fetchDog, AppDbContext dbContext)
     {
         _dbContext = dbContext;
         dogFetcher = fetchDog;
@@ -22,7 +23,7 @@ public class DogDataManager
         if (imageUrl is null) return;
 
         var breedName = ExtractBreedName(imageUrl);
-        if (string.IsNullOrEmpty(breedName)) return; // add logging
+        if (string.IsNullOrEmpty(breedName)) return;
         
         var breed = await _dbContext.Breeds.FirstOrDefaultAsync(b => b.Name == breedName)
                     ?? _dbContext.Breeds.Add(new Breed { Name = breedName }).Entity;
@@ -36,6 +37,27 @@ public class DogDataManager
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task AddDogFromAPI(PerformContext context)
+    {
+        context.WriteLine("Adding Dog");
+        string imageUrl = await dogFetcher.FetchDogFromApi();
+        if (imageUrl is null) return;
+
+        var breedName = ExtractBreedName(imageUrl);
+        if (string.IsNullOrEmpty(breedName)) return;
+        
+        var breed = await _dbContext.Breeds.FirstOrDefaultAsync(b => b.Name == breedName)
+                    ?? _dbContext.Breeds.Add(new Breed { Name = breedName }).Entity;
+        var dog = new Dog
+        {
+            Breed = breed,
+            ImageSrc = imageUrl
+        };
+        
+        _dbContext.Dogs.Add(dog);
+        await _dbContext.SaveChangesAsync();
+        context.WriteLine("Job Complete");
+    }
 
     public string ExtractBreedName(string imageUrl)
     {
