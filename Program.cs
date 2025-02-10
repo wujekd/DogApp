@@ -43,6 +43,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 1;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredUniqueChars = 0;
+});
+
 
 
 // database <-> ORM (Entity Framework) DI
