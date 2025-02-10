@@ -29,7 +29,7 @@ public class DogController : ControllerBase
     
 
     // GET A DOG FROM EXTERNAL API
-    [HttpGet("random-api")]
+    [HttpGet("random-from-web-api")]
     public async Task<IActionResult> RandomApi()
     {
         var DogImageUrl = await _FetchDog.FetchDogFromApi();

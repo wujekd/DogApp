@@ -4,7 +4,6 @@ namespace DogApp.Models;
 
 public class Dog
 {
-    [JsonIgnore]
     public int Id { get; set; } //not required because no DTO yet
     
     
