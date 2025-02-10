@@ -39,8 +39,9 @@ public class DogDataManager
 
     public string ExtractBreedName(string imageUrl)
     {
-        var breedParts = imageUrl.Split('/')[2];
+        var breedParts = imageUrl.Split('/')[4];
+        Console.WriteLine($"HERED THE BREED PARTS: {breedParts}");
         var segments = breedParts.Split('-');
-        return segments.Length > 1 ? $"{segments[0]}-{segments[1]}" : breedParts[0].ToString();
+        return segments.Length > 1 ? $"{segments[1]} {segments[0]}" : breedParts;
     }
 }
