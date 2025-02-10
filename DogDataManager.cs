@@ -18,7 +18,7 @@ public class DogDataManager
 
     public async Task AddDogFromAPI()
     {
-        var imageUrl = await dogFetcher.FetchDogFromApi();
+        string imageUrl = await dogFetcher.FetchDogFromApi();
         if (imageUrl is null) return;
 
         var breedName = ExtractBreedName(imageUrl);
@@ -26,6 +26,14 @@ public class DogDataManager
         
         var breed = await _dbContext.Breeds.FirstOrDefaultAsync(b => b.Name == breedName)
                     ?? _dbContext.Breeds.Add(new Breed { Name = breedName }).Entity;
+        var dog = new Dog
+        {
+            Breed = breed,
+            ImageSrc = imageUrl
+        };
+        
+        _dbContext.Dogs.Add(dog);
+        await _dbContext.SaveChangesAsync();
     }
 
 

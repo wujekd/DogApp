@@ -22,15 +22,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect("server=localhost;port=3306;database=dog_app;user=project_user;password=admin123;")
         )
     );
-
+builder.Services.AddScoped<DogDataManager>();
 
 var app = builder.Build();
 
 // run on startup
 using (var scope = app.Services.CreateScope())
 {
-    var dogManager = scope.ServiceProvider.GetRequiredService<DogManagerService>();
-    await dogManager.AddFetchedDogAsync(); // Runs once at startup
+    var dogManager = scope.ServiceProvider.GetRequiredService<DogDataManager>();
+    await dogManager.AddDogFromAPI();
 }
 
 
