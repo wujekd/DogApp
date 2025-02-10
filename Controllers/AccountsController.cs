@@ -1,8 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DogApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
 
@@ -87,4 +89,34 @@ public class AccountsController : Controller
 
         return Unauthorized(new { message = "Invalid email or password" });
     }
+    
+    
+    
+        
+    // ADD FAVOURITE BREED TO THE USER
+    [HttpPost("add-favourite-breed")]
+    public async Task<IActionResult> AddFavoriteBreed([FromBody] AddInterestRequest request)
+    {
+        var user = await _DbContext.Users.Include(a=>a.UserInterests).FirstOrDefaultAsync(a => a.Id == request.UserId);
+        if (user == null)
+        {
+            return BadRequest("User not found." );
+        } 
+        
+        var breed = await _DbContext.Breeds.FirstOrDefaultAsync(b => b.Id == request.BreedId);
+        
+        //check if user already has that breed in favourites
+        if (user.UserInterests.Any(b => b.BreedId == request.BreedId))
+        {
+            return BadRequest("Breed already exists.");
+        }
+        
+        
+        _DbContext.FavouriteBreeds.Add(new FavouriteBreed(){UserId = user.Id, BreedId = breed.Id });
+        
+        await _DbContext.SaveChangesAsync();
+
+        return Ok("alright");
+    }
+
 }

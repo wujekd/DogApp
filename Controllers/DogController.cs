@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using DogApp.Models;
 using DogApp.NetworkServices;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DogApp.Controllers;
@@ -12,6 +13,7 @@ public class DogController : ControllerBase
 {
     private readonly AppDbContext _DbContext;
     private readonly IFetchDog _FetchDog;
+    private readonly UserManager<User> _UserManager;
 
     public DogController(AppDbContext dbContext, IFetchDog fetchDog)
     {
@@ -61,4 +63,10 @@ public class DogController : ControllerBase
         return Ok(await _DbContext.Breeds.ToListAsync());
     }
     
+    
+
+    
+    
+    
+    // PASS MOST FREQUENTLY FAVOURITED BREEDS TO SUGGEST BREEDS ON ACCOUNT CREATION
 }

@@ -15,6 +15,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+
 // Registers with DI to manage HttpClient (no multiple instances per request)
 builder.Services.AddHttpClient<IFetchDog, FetchDog>();
 
