@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
 {
-    x.SwaggerDoc("v1", new OpenApiInfo
+    x.SwaggerDoc( "v1", new OpenApiInfo
     {
         Title = "DM Web API's",
         Version = "v1"
@@ -83,6 +83,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+// ADJUST USER CREATION REGEX
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings
@@ -94,6 +96,17 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 0;
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
 
 
 // database <-> ORM (Entity Framework) DI
@@ -103,8 +116,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
         )
     );
+
+
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+
 builder.Services.AddHangfire(opts =>
 {
     opts.UseStorage(new MySqlStorage(builder.Configuration.GetConnectionString("DefaultConnection")+"Allow User Variables=true;",
@@ -112,9 +130,10 @@ builder.Services.AddHangfire(opts =>
    opts.UseColouredConsoleLogProvider();
 });
 builder.Services.AddHangfireServer();
+
 GlobalConfiguration.Configuration.UseConsole().UseColouredConsoleLogProvider();
 
-builder.Services.AddScoped<DogAdder>();
+builder.Services.AddScoped<DogAdder>(); //add to DI
 
 var app  = builder.Build();
 
@@ -125,15 +144,22 @@ using (var scope = app.Services.CreateScope())
     await dogManager.AddDogFromAPI();
 }
 
+//enable cors
+app.UseCors("AllowFrontend");
+
+
+//HANGFIRE
 //add the job to hangfire
 using (var scope = app.Services.CreateScope())
 {
     var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
     recurringJobs.AddOrUpdate("DogsAdder",
         ()=> scope.ServiceProvider.GetRequiredService<DogAdder>().AddDogFromAPI(null),
-        Cron.Minutely());
+        Cron.Daily());
 }
 
+
+//SWAGGER
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -59,7 +59,7 @@ public class DogController : ControllerBase
     
     
 // GET ALL BREEDS WITH DOG COUNT
-    //[Authorize]
+    [Authorize]
     [HttpGet("breeds")]
     public async Task<IActionResult> GetBreeds()
     {

@@ -60,11 +60,14 @@ public class AccountsController : Controller
         }
     }
 
+    
 
     [HttpPost]
     [Route("login")]
     public async Task<IActionResult> Login(LoginDTO user)
+    
     {
+        Console.WriteLine("testy");
         var exsistingUser = await _userManager.FindByNameAsync(user.Name);
         if (exsistingUser != null && await _userManager.CheckPasswordAsync(exsistingUser, user.Password))
         {
@@ -86,7 +89,6 @@ public class AccountsController : Controller
 
             return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
         }
-
         return Unauthorized(new { message = "Invalid email or password" });
     }
     
@@ -108,10 +110,15 @@ public class AccountsController : Controller
         return Ok(response);
     }
     
-        
+    
+    // ADD DOG TO FAVOURITES
     
     
-    // ADD FAVOURITE BREED TO THE USER
+    // REMOVE DOG FROM FAVOURITES
+    
+    
+    
+    // ADD BREED TO USERS FAVOURITES
     [HttpPost("add-favourite-breed")]
     public async Task<IActionResult> AddFavoriteBreed([FromBody] AddInterestRequest request)
     {
