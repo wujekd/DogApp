@@ -8,8 +8,9 @@ const fields=loginFields;
 let fieldsState = {};
 fields.forEach(field=>fieldsState[field.id]='');
 
-export default function Login(){
+export default function Login({setLoggedState}){
     const [loginState,setLoginState]=useState(fieldsState);
+    
 
     const handleChange=(e)=>{
         setLoginState({...loginState,[e.target.id]:e.target.value})
@@ -32,8 +33,21 @@ export default function Login(){
               },
               body: JSON.stringify({ name: email, password: password })
           })
-            .then((res) => res.json())
-            .then((data) => console.log("success:", data))
+            .then((res) => {
+                console.log("res.status: ", res.status)
+                    // Handle error responses based on status code
+                    if (res.statusgit === 401) {
+                      // Invalid credentials
+                      throw new Error("Invalid credentials");
+                    }
+                    return res.json();
+                })
+            .then((data) => {
+                console.log("success:", data.token)
+                localStorage.setItem("auth", JSON.stringify(data.token))
+                setLoggedState(true)
+                // set app state to logged
+            })
             .catch((err) => console.error("failed:", err));
     }
 

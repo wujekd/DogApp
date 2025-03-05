@@ -11,6 +11,8 @@ const Signup = () => {
 
     const [inputStates, setInputStates] = useState(fieldsState)
     const handleChange=(e)=>setInputStates({...inputStates,[e.target.id]:e.target.value});
+    const [resultMessage, setResultMessage] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e)=> {
         e.preventDefault();
@@ -31,7 +33,11 @@ const Signup = () => {
               body: JSON.stringify({ name: email, password: password })
           })
             .then((res) => res.json())
-            .then((data) => console.log("success:", data))
+            .then((data) => {
+                console.log("success:", data)
+                setResultMessage(data.message)
+
+            })
             .catch((err) => console.error("failed:", err));
     }
 
@@ -58,6 +64,8 @@ const Signup = () => {
             }
           <FormAction method="POST" text="Signup" />
         </div>
+        {resultMessage && <p style={{ color: 'green' }}>{resultMessage}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
 
 
