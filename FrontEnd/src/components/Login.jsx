@@ -33,8 +33,8 @@ export default function Login(){
               body: JSON.stringify({ name: email, password: password })
           })
             .then((res) => res.json())
-            .then((data) => console.log("CORS test success:", data))
-            .catch((err) => console.error("CORS test failed:", err));
+            .then((data) => console.log("success:", data))
+            .catch((err) => console.error("failed:", err));
     }
 
     return(
