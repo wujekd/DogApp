@@ -67,7 +67,6 @@ public class AccountsController : Controller
     public async Task<IActionResult> Login(LoginDTO user)
     
     {
-        Console.WriteLine("testy");
         var exsistingUser = await _userManager.FindByNameAsync(user.Name);
         if (exsistingUser != null && await _userManager.CheckPasswordAsync(exsistingUser, user.Password))
         {
@@ -76,6 +75,7 @@ public class AccountsController : Controller
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"] ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("UserId", exsistingUser.Id.ToString()),
+                new Claim("UserName", user.Name.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
