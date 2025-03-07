@@ -5,6 +5,18 @@
 
 @layer base {
     body {
-      @apply text-gray-200;
+      @apply text-gray-200
+      w-full
+    }
+    * {
+      @apply box-border;
+    }
+
+    .mainContainer {
+      @apply
+      bg-primary-10
+      m-4
+      p-4
+      w-1/2
     }
   }

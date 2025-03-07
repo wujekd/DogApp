@@ -6,6 +6,8 @@ import {
 import SignupPage from './pages/Signup';
 import LoginPage from './pages/Login';
 import { useState, useEffect } from "react";
+import Main from "./pages/Main"
+import Info from "./components/Info";
 
 function App() {
   const [loggedState, setLoggedState] = useState(false);
@@ -22,8 +24,9 @@ function App() {
   return (
     <div className="bg-background min-h-full h-screen flex 
     items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div className="max-w-md w-full space-y-8">
+    <div className="w-screen space-y-8">
      <BrowserRouter>
+     <Info loggedState={loggedState}/>
         <Routes>
         <Route
           path="/"
@@ -31,7 +34,7 @@ function App() {
         />
         <Route
           path="/login"
-          element={loggedState ? <Navigate to="/main" replace /> : <LoginPage setLoggedState={setLoggedState} />}
+          element={loggedState ? <Main /> : <LoginPage setLoggedState={setLoggedState} />}
         />
             <Route path="/signup" element={<SignupPage/>} />
         </Routes>
