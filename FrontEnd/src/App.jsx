@@ -22,9 +22,9 @@ function App() {
 
 
   return (
-    <div className="bg-background min-h-full h-screen flex 
+    <div className="bg-background h-screen flex 
     items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div className="w-screen space-y-8">
+    <div className="w-screen h-full space-y-8">
      <BrowserRouter>
      <Info loggedState={loggedState}/>
         <Routes>

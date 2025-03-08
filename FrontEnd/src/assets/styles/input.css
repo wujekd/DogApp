@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 
+
 @layer base {
     body {
       @apply text-gray-200
@@ -18,5 +19,12 @@
       m-4
       p-4
       w-1/2
+      h-4/5
+      overflow-auto
+    }
+
+    .dog{
+      @apply
+      pb-9
     }
   }

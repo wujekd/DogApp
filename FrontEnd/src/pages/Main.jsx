@@ -5,7 +5,7 @@ import AddDog from '../components/AddDog'
 
 const Main = () => {
   return (
-    <div className='flex w-full'>
+    <div className='flex w-full h-full'>
       
       <MyDogs />
       <AddDog />
