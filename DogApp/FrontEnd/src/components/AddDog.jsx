@@ -17,11 +17,12 @@ const AddDog = () => {
 
 
   const handleChange = (e) => {
-    
+    setFormState({...formState, [e.target.id]:e.target.value})
   }
 
-  const handleSubmit = ()=> {
-
+  const handleSubmit = (e)=> {
+    e.preventDefault();
+    console.log(formState)
   }
 
   return (

@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("auth");
-    if (token) {
+    if (token && token != 'null') {
       setLoggedState(true);
     }
   }, []); 
@@ -26,7 +26,7 @@ function App() {
     items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div className="w-screen h-full space-y-8">
      <BrowserRouter>
-     <Info loggedState={loggedState}/>
+     <Info loggedState={loggedState} setLoggedState={setLoggedState}/>
         <Routes>
         <Route
           path="/"

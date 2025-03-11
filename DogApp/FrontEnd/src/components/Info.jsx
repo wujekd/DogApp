@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode';
 
 
-const Info = ({ loggedState }) => {
+const Info = ({ loggedState, setLoggedState }) => {
 
     const [userName, setUserName] = useState(null)
 
@@ -16,11 +16,21 @@ const Info = ({ loggedState }) => {
             } catch (e) {
                 console.error(e)
             }
+        } else {
+            setUserName("")
         }
     })
 
+    const handleLogout = () => {
+        localStorage.setItem("auth", null)
+        setLoggedState(false)
+    }
+
   return (
-    <div className='fixed top-8'>logged user: { userName }</div>
+    <div className='fixed top-8 flex'>
+        <div>logged user: { userName }</div>
+        <button onClick={ ()=> { handleLogout() }} className='bg-red-300 m-4 px-4 py-1'>logout</button>
+    </div>
   )
 
 }

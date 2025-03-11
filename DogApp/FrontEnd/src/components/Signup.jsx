@@ -68,7 +68,6 @@ const Signup = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
 
-
     </form>
   )
 }
